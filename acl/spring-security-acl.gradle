@@ -1,5 +1,11 @@
 apply plugin: 'io.spring.convention.spring-module'
 
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/plugins-snapshot' }
+	maven { url 'https://plugins.gradle.org/m2/' }
+}
+
 dependencies {
 	compile project(':spring-security-core')
 	compile 'org.springframework:spring-aop'
@@ -7,12 +13,19 @@ dependencies {
 	compile 'org.springframework:spring-core'
 	compile 'org.springframework:spring-jdbc'
 	compile 'org.springframework:spring-tx'
+	implementation('org.springframework.data:spring-data-mongodb') {
+		// excluded as Gradle is unable to find that dependency ...
+	 	exclude group: 'org.mongodb', module: 'mongodb-driver-sync'
+	}
 
 	optional 'net.sf.ehcache:ehcache'
 
+	testCompile project(':spring-security-test')
 	testCompile 'org.springframework:spring-beans'
 	testCompile 'org.springframework:spring-context-support'
 	testCompile 'org.springframework:spring-test'
+	testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.0.0'
+	testImplementation 'org.mongodb:mongodb-driver-sync:4.0.5'
 
 	testRuntime 'org.hsqldb:hsqldb'
 }
